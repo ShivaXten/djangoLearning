@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from .models import Room
 
 # Create your views here.
 def home(request):
@@ -13,6 +14,8 @@ def homeTemp(request):
 
 def roomTemp(request):
         return render (request,'RoomTemp.html')
+
+
 
 
 
