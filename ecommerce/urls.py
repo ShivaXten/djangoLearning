@@ -7,8 +7,9 @@ admin.site.site_title = "Shiva Admin Portal"
 admin.site.index_title = "Welcome to Shiva Portal"
 
 urlpatterns = [
+    path('',include('mywebsite.urls')),
     path('admin/', admin.site.urls),
-    path('',include('base.urls')),
+    path('base/',include('base.urls')),
     path('users/', include('users.urls')),
 ]
 

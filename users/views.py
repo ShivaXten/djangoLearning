@@ -17,27 +17,29 @@ def register(request):
             if user is not None:
                 login(request, user)
                 messages.success(request, 'Registration successful.')
-                return redirect('profile')  # Redirect to the profile page or any other page
+                return redirect('profile')  
         else:
             messages.error(request, 'Registration failed. Please correct the errors below.')
     else:
         form = UserCreationForm()
-    return render(request, 'register.html', {'form': form})
+    return render(request, 'register.html')
 
 # Login view
 def user_login(request):
-    if request.method == 'POST':
-        form = AuthenticationForm(request, data=request.POST)
-        if form.is_valid():
-            user = form.get_user()
-            login(request, user)
-            messages.success(request, 'Login successful.')
-            return redirect('home')  # Redirect to the home page or any other page
-        else:
-            messages.error(request, 'Login failed. Please check your username and password.')
-    else:
-        form = AuthenticationForm()
-    return render(request, 'login.html', {'form': form})
+        return render(request,'login.html')
+    
+    #  request.method == 'POST':
+    #     form = AuthenticationForm(request, data=request.POST)
+    #     if form.is_valid():
+    #         user = form.get_user()
+    #         login(request, user)
+    #         messages.success(request, 'Login successful.')
+    #         return redirect('home')  # Redirect to the home page or any other page
+    #     else:
+    #         messages.error(request, 'Login failed. Please check your username and password.')
+    # else:
+    #     form = AuthenticationForm()
+    # return render(request, 'login.html')
 
 # Logout view
 def user_logout(request):

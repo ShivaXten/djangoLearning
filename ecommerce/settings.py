@@ -41,7 +41,9 @@ INSTALLED_APPS = [
 
     # my apps
    'base',
-   'users'
+   'users',
+   'mywebsite'
+   
 
 ]
 
