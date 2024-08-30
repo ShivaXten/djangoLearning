@@ -7,5 +7,10 @@ class Contact(models.Model):
     phone=models.CharField(max_length=15)
     desc=models.TextField()
     date=models.DateField()
+    
+    #this is done so that you can see in the datebase with their name 
+    def __str__(self):
+        return self.name
+   
 
     

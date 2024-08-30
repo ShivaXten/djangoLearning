@@ -10,6 +10,7 @@ urlpatterns = [
     path('',include('mywebsite.urls')),
     path('admin/', admin.site.urls),
     path('base/',include('base.urls')),
-    path('users/', include('users.urls')),
+    path('users/', include('usersapp.urls')),
+
 ]
 

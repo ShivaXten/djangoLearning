@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 from decouple import config
+from django.contrib.messages import constants as messages
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -41,9 +42,8 @@ INSTALLED_APPS = [
 
     # my apps
    'base',
-   'users',
-   'mywebsite'
-   
+   'mywebsite',
+   'usersapp',
 
 ]
 
@@ -83,10 +83,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ecommerce.wsgi.application'
 
-#user auth
-AUTH_USER_MODEL = 'users.CustomUser'
-LOGIN_REDIRECT_URL = 'home'
-LOGOUT_REDIRECT_URL = 'home'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
@@ -139,3 +135,11 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#this is the added 
+
+# URL to redirect after a successful login
+LOGIN_REDIRECT_URL = '/user/dashboard/'
+
+# URL to redirect after a successful logout
+LOGOUT_REDIRECT_URL = '/user/login/'

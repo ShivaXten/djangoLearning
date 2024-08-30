@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Contact
 from datetime import datetime
+from django.contrib import messages
 
 #this is the navbar section 
 def home(request):
@@ -30,6 +31,8 @@ def contact(request):
                 desc =request.POST.get('desc')
                 contact =Contact(name=name, email=email, phone=phone, desc= desc ,date = datetime.today())
                 contact.save()
+               #this is done to send the messages 
+                messages.success(request, "Profile details updated.")
         return render (request ,'contact.html')
 
 
