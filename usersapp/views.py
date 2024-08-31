@@ -11,7 +11,7 @@ def register(request):
         if form.is_valid():
             user = form.save()
             auth_login(request, user)
-            return redirect('dashboard.html')
+            return redirect('dashboard')
         else:
             print("Form errors:", form.errors) 
     else:
@@ -24,7 +24,7 @@ def login(request):
         if form.is_valid():
             user = form.get_user()
             auth_login(request, user)
-            return redirect('dashboard.html')
+            return redirect('dashboard')
     else:
         form = AuthenticationForm()
     return render(request, 'login.html', {'form': form})
