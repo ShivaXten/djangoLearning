@@ -2,11 +2,13 @@ from django.shortcuts import render,redirect
 
 # Create your views here.
 from django.contrib.auth import login as auth_login, logout as auth_logout
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegisterForm, ProfileForm
 from .models import Profile
 
+
+# This is to register the new user and also direct it to create_profile  (POST)
 def register(request):
     if request.method == 'POST':
         user_form = UserRegisterForm(request.POST)
@@ -19,6 +21,9 @@ def register(request):
         user_form = UserRegisterForm()
     return render(request, 'registration.html', {'form': user_form})
 
+
+
+# This is to login the existing  user from the database by checking the username and password field (POST)
 def login(request):
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
@@ -30,16 +35,28 @@ def login(request):
         form = AuthenticationForm()
     return render(request, 'login.html', {'form': form})
 
+
+
+# This is to logout the existing credentials  
 def logout(request):
     auth_logout(request)
     return redirect('login')
 
+
+
+# This is to show the dashboard only if the user is valid in the database decorator login is used 
 @login_required
 def dashboard(request):
-    return render(request, 'dashboard.html')
+    try:
+        profile = Profile.objects.get(user=request.user)
+    except Profile.DoesNotExist:
+        profile = None
+    return render(request, 'dashboard.html', {'profile': profile})
 
 
-# to create the user profile
+
+# This is to create the user profile and save in the database as Profile form will pass files too that is image (POST) 
+# if created it will redirect directly to dashboard
 def create_profile(request):
     if request.method == 'POST':
         profile_form = ProfileForm(request.POST, request.FILES, instance=request.user.profile)

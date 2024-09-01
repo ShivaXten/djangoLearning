@@ -5,7 +5,16 @@
 </head>
 <body>
     <h2>Success!</h2>
-    <p>Welcome to the dashboard.</p>
+    <p>Welcome to the dashboard, {{ profile.user.username }}.</p>
+    <p>
+        {% if profile.image %}
+            <img src="{{ profile.image.url }}" alt="Profile Image" style="max-width: 150px;">
+        {% else %}
+            No profile image available.
+        {% endif %}
+    </p>
+        <p>Location: {{ profile.location }}</p>
+    <p>Phone: {{ profile.phone }}</p>
     <p><a href="{% url 'logout' %}">Logout</a></p>
 </body>
 </html>
