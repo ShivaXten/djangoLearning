@@ -143,3 +143,7 @@ LOGIN_REDIRECT_URL = '/user/dashboard/'
 
 # URL to redirect after a successful logout
 LOGOUT_REDIRECT_URL = '/user/login/'
+
+#this is to add the profile image media 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

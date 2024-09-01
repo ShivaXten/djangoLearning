@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Register</title>
+    <title>Create Your Profile</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -22,7 +22,7 @@
             max-width: 100%;
         }
 
-        h2 {
+        h1 {
             margin-bottom: 20px;
             color: #333;
             text-align: center;
@@ -44,7 +44,7 @@
         }
 
         input[type="text"],
-        input[type="password"] {
+        input[type="file"] {
             width: 100%;
             padding: 10px;
             border: 1px solid #ddd;
@@ -70,6 +70,11 @@
             background-color: #45a049;
         }
 
+        .error {
+            color: red;
+            margin-top: 5px;
+        }
+
         p {
             text-align: center;
         }
@@ -86,33 +91,33 @@
 </head>
 <body>
     <div class="container">
-        <h2>Register</h2>
-        <form method="post">
+        <h1>Create Your Profile</h1>
+        <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="form-group">
-                {{ form.username.label_tag }}
-                {{ form.username }}
-                {% if form.username.errors %}
-                    <div class="error">{{ form.username.errors }}</div>
+                {{ profile_form.image.label_tag }}
+                {{ profile_form.image }}
+                {% if profile_form.image.errors %}
+                    <div class="error">{{ profile_form.image.errors }}</div>
                 {% endif %}
             </div>
             <div class="form-group">
-                {{ form.password1.label_tag }}
-                {{ form.password1 }}
-                {% if form.password1.errors %}
-                    <div class="error">{{ form.password1.errors }}</div>
+                {{ profile_form.location.label_tag }}
+                {{ profile_form.location }}
+                {% if profile_form.location.errors %}
+                    <div class="error">{{ profile_form.location.errors }}</div>
                 {% endif %}
             </div>
             <div class="form-group">
-                {{ form.password2.label_tag }}
-                {{ form.password2 }}
-                {% if form.password2.errors %}
-                    <div class="error">{{ form.password2.errors }}</div>
+                {{ profile_form.phone.label_tag }}
+                {{ profile_form.phone }}
+                {% if profile_form.phone.errors %}
+                    <div class="error">{{ profile_form.phone.errors }}</div>
                 {% endif %}
             </div>
-            <button type="submit" id="register">Register</button>
+            <button type="submit">Save Profile</button>
         </form>
-        <p><a href="{% url 'login' %}">Already have an account? Login</a></p>
+        <p><a href="{% url 'dashboard' %}">Back to Dashboard</a></p>
     </div>
 </body>
 </html>
