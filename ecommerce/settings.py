@@ -41,9 +41,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles', 
 
     # my apps
-   'base',
    'mywebsite',
    'usersapp',
+   'products',
 
 ]
 
@@ -61,7 +61,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    
+
      #custom middleware
     'usersapp.users_middleware.unauthorize_redirect_middleware.RedirectToRegisterMiddleware',
 
