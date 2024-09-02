@@ -61,6 +61,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
+     #custom middleware
+    'usersapp.users_middleware.unauthorize_redirect_middleware.RedirectToRegisterMiddleware',
+
 ]
 
 ROOT_URLCONF = 'ecommerce.urls'

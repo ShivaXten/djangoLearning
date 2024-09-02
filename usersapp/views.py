@@ -1,6 +1,4 @@
-from django.shortcuts import render,redirect
-
-# Create your views here.
+from django.shortcuts import render, redirect
 from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
@@ -30,10 +28,13 @@ def login(request):
         if form.is_valid():
             user = form.get_user()
             auth_login(request, user)
-            return redirect('dashboard')
+            next_url = request.POST.get('next', 'dashboard')  # Redirect to 'next' or 'dashboard'
+            return redirect(next_url)
     else:
         form = AuthenticationForm()
-    return render(request, 'login.html', {'form': form})
+
+    next_url = request.GET.get('next', 'register')  # Default to 'register' if no 'next'
+    return render(request, 'login.html', {'form': form, 'next': next_url})
 
 
 
