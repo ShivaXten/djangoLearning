@@ -10,11 +10,12 @@ from .serializers import ProductSerializer
 #This will show that which API of products is Available
 @api_view(['GET'])
 def productOverview(request):
-    product_urls={
-        "list":"/productList/",
+    product_urls = {
+        'Display all products': '/productList/',
+        'Display by ID': '/productDetail/',
     }
 
-    return Response("product_urls")
+    return Response(product_urls)
 
 
 
@@ -23,6 +24,14 @@ def productOverview(request):
 def productList(request):
     products = Product.objects.all()  
     serializer = ProductSerializer(products, many=True)  
+    return Response(serializer.data)
+
+
+#This is to fetch products by ID done by passing the id with request
+@api_view(['GET'])
+def productDetail(request,pk):
+    products = Product.objects.get(id=pk)  
+    serializer = ProductSerializer(products, many=False)  
     return Response(serializer.data)
 
 
