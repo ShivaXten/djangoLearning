@@ -44,6 +44,8 @@ INSTALLED_APPS = [
    'mywebsite',
    'usersapp',
    'products',
+   #this is for the rest_framework installed from 
+   'rest_framework'
 
 ]
 
