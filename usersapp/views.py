@@ -4,6 +4,12 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegisterForm, ProfileForm
 from .models import Profile
+#this is from the rest_framework
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework import status
+from .serializers import ProfileSerializer
 
 
 # This is to register the new user and also direct it to create_profile  (POST)
@@ -67,3 +73,20 @@ def create_profile(request):
     else:
         profile_form = ProfileForm()
     return render(request, 'create_profile.html', {'profile_form': profile_form})
+
+
+
+# This is to update the user profile only it uses rest_framework decorators 
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def edit_profile(request):
+    try:
+        profile = Profile.objects.get(user=request.user)
+    except Profile.DoesNotExist:
+        return Response({'error': 'Profile not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    serializer = ProfileSerializer(profile, data=request.data, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
