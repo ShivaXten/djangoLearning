@@ -12,7 +12,7 @@ from .serializers import ProductSerializer
 def productOverview(request):
     product_urls = {
         'Display all products': '/productList/',
-        'Display by ID': '/productDetail/',
+        'Display by ID': '<ID>/',
     }
 
     return Response(product_urls)
