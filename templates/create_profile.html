@@ -44,7 +44,9 @@
         }
 
         input[type="text"],
-        input[type="file"] {
+        input[type="file"],
+        input[type="email"],
+        input[type="date"] {
             width: 100%;
             padding: 10px;
             border: 1px solid #ddd;
@@ -113,6 +115,20 @@
                 {{ profile_form.phone }}
                 {% if profile_form.phone.errors %}
                     <div class="error">{{ profile_form.phone.errors }}</div>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ profile_form.email.label_tag }}
+                {{ profile_form.email }}
+                {% if profile_form.email.errors %}
+                    <div class="error">{{ profile_form.email.errors }}</div>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ profile_form.date_of_birth.label_tag }}
+                {{ profile_form.date_of_birth }}
+                {% if profile_form.date_of_birth.errors %}
+                    <div class="error">{{ profile_form.date_of_birth.errors }}</div>
                 {% endif %}
             </div>
             <button type="submit">Save Profile</button>
