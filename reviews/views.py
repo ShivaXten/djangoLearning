@@ -9,10 +9,10 @@ from .serializers import ReviewSerializer
 @api_view(['GET'])
 def reviewsOverview(request):
     review_urls = {
-        'List all reviews': '/All/',
-        'Create a review for a specific product': '/create/<product_id>/',
-        'Update a review': '/update/<id>/',
-        'Delete a review': '/delete/<id>/',
+        'List all reviews': 'all/',
+        'Create a review for a specific product': 'create/<product_id>/',
+        'Update a review': 'update/<id>/',
+        'Delete a review': 'delete/<id>/',
     }
     return Response(review_urls)
 

@@ -18,4 +18,4 @@ class Review(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='reviews', on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
-        return f"Review by {self.reviewer_name} on {self.product.title}"
+        return f"Review by {self.user.username} on product {self.product.title}"

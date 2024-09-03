@@ -11,7 +11,7 @@ from .serializers import ProductSerializer
 @api_view(['GET'])
 def productOverview(request):
     product_urls = {
-        'Display all products': '/productList/',
+        'Display all products': 'all/',
         'Display by ID': '<ID>/',
     }
 
