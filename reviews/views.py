@@ -11,6 +11,7 @@ from .utils import update_product_rating
 def reviewsOverview(request):
     review_urls = {
         'List all reviews': 'all/',
+        'Display review by ID of review ': '<ID>/',
         'Create a review for a specific product': 'create/<product_id>/',
         'Update a review': 'update/<id>/',
         'Delete a review': 'delete/<id>/',
@@ -24,6 +25,16 @@ def review_list(request):
     reviews = Review.objects.all()
     serializer = ReviewSerializer(reviews, many=True)
     return Response(serializer.data)
+
+
+
+#This is to fetch review by ID done by passing the id with request
+@api_view(['GET'])
+def reviewDetail(request,pk):
+    review = Review.objects.get(id=pk)  
+    serializer = ReviewSerializer(review, many=False)  
+    return Response(serializer.data)
+
 
 
 # Create a new review for a specific product
