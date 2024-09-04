@@ -44,6 +44,7 @@
         }
 
         input[type="text"],
+        input[type="email"],
         input[type="password"] {
             width: 100%;
             padding: 10px;
@@ -94,6 +95,13 @@
                 {{ form.username }}
                 {% if form.username.errors %}
                     <div class="error">{{ form.username.errors }}</div>
+                {% endif %}
+            </div>
+             <div class="form-group">
+                {{ form.email.label_tag }}
+                {{ form.email }}
+                {% if form.email.errors %}
+                    <div class="error">{{ form.email.errors }}</div>
                 {% endif %}
             </div>
             <div class="form-group">
