@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from .models import Review, Product
 from .serializers import ReviewSerializer
+from .utils import update_product_rating
 
 
 # Overview of available review endpoints
@@ -32,10 +33,12 @@ def create_review(request, product_id):
     try:
         product = Product.objects.get(id=product_id)
     except Product.DoesNotExist:
-        return Response({'error': 'Product not found'}, status=404) 
+        return Response({'error': 'Product not found'}, status=404)
+
     data = request.data.copy()
     data['product'] = product_id  
-    # This is to check if the user has already created the review for the same product 
+    
+    # Check if the user has already reviewed this product
     existing_review = Review.objects.filter(product=product, user=request.user).first()
     
     if existing_review:
@@ -44,12 +47,13 @@ def create_review(request, product_id):
     else:
         # Create a new review
         serializer = ReviewSerializer(data=data)
-        
+    
     if serializer.is_valid():
         serializer.save(user=request.user)
+        # Update the product rating after saving the review
+        update_product_rating(product)
         return Response(serializer.data, status=200 if existing_review else 201)
     return Response(serializer.errors, status=400)
-
 
 
 # This is to update the review in any case PATCH 
@@ -67,6 +71,8 @@ def update_review(request, pk):
     serializer = ReviewSerializer(review, data=request.data, partial=(request.method == 'PATCH'))
     if serializer.is_valid():
         serializer.save()
+        # Update the product rating after updating the review
+        update_product_rating(review.product)
         return Response(serializer.data)
     return Response(serializer.errors, status=400)
 
@@ -83,7 +89,21 @@ def delete_review(request, pk):
 
     if request.user != review.user:
         return Response({'error': 'You do not have permission to delete this review'}, status=403)
-    
+
+    # Capture review details before deletion
+    review_data = {
+        'id': review.id,
+        'rating': review.rating,
+        'comment': review.comment,
+        'date': review.date,
+    }
+
+    product = review.product
     review.delete()
-    return Response(status=204)
+
+    # Update the product rating after deleting the review
+    update_product_rating(product)
+    
+    # Return the deleted review information in the response
+    return Response({'message': 'Review deleted', 'review': review_data}, status=200)
 
