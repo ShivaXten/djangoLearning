@@ -32,15 +32,22 @@ def create_review(request, product_id):
     try:
         product = Product.objects.get(id=product_id)
     except Product.DoesNotExist:
-        return Response({'error': 'Product not found'}, status=404)
-    
+        return Response({'error': 'Product not found'}, status=404) 
     data = request.data.copy()
     data['product'] = product_id  
+    # This is to check if the user has already created the review for the same product 
+    existing_review = Review.objects.filter(product=product, user=request.user).first()
     
-    serializer = ReviewSerializer(data=data)
+    if existing_review:
+        # Update the existing review
+        serializer = ReviewSerializer(existing_review, data=data, partial=True)
+    else:
+        # Create a new review
+        serializer = ReviewSerializer(data=data)
+        
     if serializer.is_valid():
-        serializer.save(user=request.user) 
-        return Response(serializer.data, status=201)
+        serializer.save(user=request.user)
+        return Response(serializer.data, status=200 if existing_review else 201)
     return Response(serializer.errors, status=400)
 
 
