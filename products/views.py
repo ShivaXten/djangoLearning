@@ -12,7 +12,9 @@ from .serializers import ProductSerializer
 def productOverview(request):
     product_urls = {
         'Display all products': 'all/',
-        'Display by ID': '<ID>/',
+        'Display by category':'category/<str:category_name>',
+        'Display by ID': '<ID>/'
+
     }
 
     return Response(product_urls)
@@ -34,4 +36,14 @@ def productDetail(request,pk):
     serializer = ProductSerializer(products, many=False)  
     return Response(serializer.data)
 
+
+# This is to fetch products category by passing the category name in the response
+@api_view(['GET'])
+def products_by_category(request, category_name):
+    products = Product.objects.filter(category=category_name)
+    if not products.exists():
+        return Response({'error': 'No products found for this category'}, status=404)
+    
+    serializer = ProductSerializer(products, many=True)
+    return Response(serializer.data)
 
