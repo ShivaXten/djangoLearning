@@ -47,7 +47,8 @@ INSTALLED_APPS = [
    'reviews',
    #this is for the rest_framework installed from 
    'rest_framework',
-   'cart'
+   'cart',
+   'order'
   
 
 ]
