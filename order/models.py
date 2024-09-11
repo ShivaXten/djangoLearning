@@ -1,8 +1,10 @@
 from django.conf import settings
 from django.db import models
 from products.models import Product
+from .orderCalculations import calculate_total_price,calculate_amount_after_discount
 
 class Order(models.Model):
+    
     STATUS_CHOICES = [
         ('pending', 'Pending'),
         ('paid', 'Paid'),
@@ -30,7 +32,7 @@ class Order(models.Model):
 
     totalQuantity = models.PositiveIntegerField(default=1)
     price_after_discount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
-    shippingCost = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    shippingCost = models.PositiveIntegerField(default=80)
     totalPrice = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     orderStatus = models.CharField(max_length=15, choices=STATUS_CHOICES, default='pending')
     orderDate = models.DateTimeField(auto_now_add=True)
@@ -41,12 +43,20 @@ class Order(models.Model):
     tracking_number = models.CharField(max_length=50, blank=True, null=True)
 
     # This is for any discount later in the product  
-    coupon_code = models.CharField(max_length=50, blank=True, null=True)
+    coupon_code = models.PositiveIntegerField(default=0)
     # This note is for the admin if any error occur he/she can send note to that order
     notes = models.TextField(blank=True, null=True)
 
 
-    
+    def save(self, *args, **kwargs):
+        if self.product:
+            product_price = self.product.price
+
+            Product_Discount_Percent=self.product.discount_percentage
+
+            self.totalPrice = calculate_total_price(self.totalQuantity, product_price, self.shippingCost)
+            self.price_after_discount = calculate_amount_after_discount (Product_Discount_Percent,product_price,self.coupon_code,self.totalQuantity)     
+        super().save(*args, **kwargs)
 
 
     def __str__(self):

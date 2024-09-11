@@ -6,7 +6,8 @@ from .import views
 router = DefaultRouter()
 
 router.register('api',views.OrderModelViewSet,basename='order')
-# router.register('view',views.OrderReadOnlyModelViewSet,basename='ViewOrder')
+# router.register('pay',views.OrderStatusSerializer,basename='PaymentOfOrder')
+
 
 
 
