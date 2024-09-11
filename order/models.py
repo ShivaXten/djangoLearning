@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.db import models
 from products.models import Product
-from .orderCalculations import calculate_total_price,calculate_amount_after_discount,get_shipping_cost
+from .orderCalculations import calculate_total_price,calculate_amount_after_discount,get_shipping_cost,get_coupon_discount
 
 
 # This is for the admin to set the location 
@@ -14,22 +14,19 @@ class Location(models.Model):
     
 
 
+# This is for the admin to set the Coupon_code discount 
+class Coupon(models.Model):
+    Coupon_name = models.CharField(max_length=100, unique=True)
+    Coupon_Discount = models.PositiveIntegerField() 
+
+    def __str__(self):
+        return f"{self.Coupon_name} - {self.Coupon_Discount}"
+    
+
+
+
 class Order(models.Model):
 
-    # LOCATION_CHOICES =[
-    #     ('parsyang','50'),
-    #     ('amarsingh','60'),
-    #     ('birauta','40'),
-    #     ('bindabasini','45'),
-    #     ('bhalam','80'),
-    #     ('manipal','60'),
-    #     ('lekhnath','45'),
-    #     ('lakeside','80'),
-    #     ('outofvalley','500'),
-    #     ('shop','20')
-        
-    # ]
-    
     STATUS_CHOICES = [
         ('pending', 'Pending'),
         ('paid', 'Paid'),
@@ -55,6 +52,8 @@ class Order(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='orders', on_delete=models.CASCADE)
     product = models.ForeignKey(Product, related_name='orders', on_delete=models.CASCADE)
     location = models.ForeignKey(Location, related_name='orders', on_delete=models.SET_NULL, null=True, blank=True)
+    coupon = models.ForeignKey(Coupon, related_name='orders', on_delete=models.SET_NULL, null=True, blank=True)
+
 
     totalQuantity = models.PositiveIntegerField(default=1)
     price_after_discount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
@@ -69,20 +68,25 @@ class Order(models.Model):
     tracking_number = models.CharField(max_length=50, blank=True, null=True)
 
     # This is for any discount later in the product  
-    coupon_code = models.PositiveIntegerField(default=0)
+    coupon_code = models.CharField(max_length=225, blank=True )
+    Coupon_code_discount_percent = models.PositiveIntegerField(default=0)
+
     # This note is for the admin if any error occur he/she can send note to that order
     notes = models.TextField(blank=True, null=True)
-
+    
 
     def save(self, *args, **kwargs):
        
         if self.product:
             product_price = self.product.price
             Product_Discount_Percent=self.product.discount_percentage
-
+            
+            # self.Coupon_code_discount_percent=self.coupon.Coupon_Discount
+            
+            self.Coupon_code_discount_percent = get_coupon_discount(self.coupon_code)
             self.shippingCost = get_shipping_cost(self.shippingAddress)
-            self.totalPrice = calculate_total_price(Product_Discount_Percent,product_price,self.coupon_code,self.totalQuantity, self.shippingCost)
-            self.price_after_discount = calculate_amount_after_discount (Product_Discount_Percent,product_price,self.coupon_code,self.totalQuantity)     
+            self.totalPrice = calculate_total_price(Product_Discount_Percent,product_price,self.Coupon_code_discount_percent ,self.totalQuantity, self.shippingCost)
+            self.price_after_discount = calculate_amount_after_discount (Product_Discount_Percent,product_price,self.Coupon_code_discount_percent,self.totalQuantity)     
         super().save(*args, **kwargs)
 
 

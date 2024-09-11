@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Order
+from .models import Order,Location
 from products.models import Product
 from products.serializers import ProductSerializer
 
@@ -7,7 +7,7 @@ from products.serializers import ProductSerializer
 class OrderCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
-        fields = ['product', 'totalQuantity', 'shippingAddress', 'paymentMethod']
+        fields = ['product', 'totalQuantity', 'shippingAddress','coupon_code','paymentMethod']
 
 
 
@@ -23,4 +23,5 @@ class OrderDetailSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Order
-        exclude = ['location']
+        #this will include exclude=['location'] is same as this (field='__all__' -location)
+        exclude = ['location','coupon']
