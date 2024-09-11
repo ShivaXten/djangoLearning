@@ -10,7 +10,7 @@ class Location(models.Model):
     price = models.PositiveIntegerField() 
 
     def __str__(self):
-        return f"{self.name} - {self.price}"
+        return f"{self.name} location will charge : {self.price}"
     
 
 
@@ -20,7 +20,7 @@ class Coupon(models.Model):
     Coupon_Discount = models.PositiveIntegerField() 
 
     def __str__(self):
-        return f"{self.Coupon_name} - {self.Coupon_Discount}"
+        return f"This {self.Coupon_name} coupon code will provide : {self.Coupon_Discount} % discount"
     
 
 
@@ -67,7 +67,7 @@ class Order(models.Model):
     payment_status = models.CharField(max_length=15, choices=PAYMENT_STATUS_CHOICES, default='pending')
     tracking_number = models.CharField(max_length=50, blank=True, null=True)
 
-    # This is for any discount later in the product  
+    # This is for any discount later in the using the Coupon  
     coupon_code = models.CharField(max_length=225, blank=True )
     Coupon_code_discount_percent = models.PositiveIntegerField(default=0)
 
@@ -81,7 +81,6 @@ class Order(models.Model):
             product_price = self.product.price
             Product_Discount_Percent=self.product.discount_percentage
             
-            # self.Coupon_code_discount_percent=self.coupon.Coupon_Discount
             
             self.Coupon_code_discount_percent = get_coupon_discount(self.coupon_code)
             self.shippingCost = get_shipping_cost(self.shippingAddress)
