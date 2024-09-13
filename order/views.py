@@ -1,7 +1,11 @@
-from rest_framework import viewsets
+from rest_framework import viewsets 
 from rest_framework.permissions import IsAuthenticated
-from .models import Order
-from .serializers import OrderCreateSerializer, OrderDetailSerializer
+from rest_framework.response import Response
+from rest_framework.decorators import action
+from .models import Order, Coupon
+from .serializers import OrderCreateSerializer, OrderDetailSerializer,CouponVerifySerializer
+# ,OrderCouponVerifySerializer
+from rest_framework.views import APIView
 
 
 
@@ -21,3 +25,13 @@ class OrderModelViewSet(viewsets.ModelViewSet):
         return Order.objects.filter(user=self.request.user)
     
 
+
+
+# This is to validate the coupon
+class CouponVerifyView(APIView):
+    def post(self, request):
+        serializer = CouponVerifySerializer(data=request.data)
+        if serializer.is_valid():
+            response_data = serializer.validated_data
+            return Response(response_data)
+        return Response(serializer.errors)
