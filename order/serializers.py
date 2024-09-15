@@ -11,19 +11,6 @@ class OrderCreateSerializer(serializers.ModelSerializer):
 
 
 
-# class CouponVerifySerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Coupon
-#         fields =['Coupon_name']
-
-
-# class OrderCouponVerifySerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Order
-#         fields =['coupon_code']
-    
-
-
 class OrderDetailSerializer(serializers.ModelSerializer):
     product = ProductSerializer()  
     
@@ -38,14 +25,3 @@ class OrderDetailSerializer(serializers.ModelSerializer):
 # This is the serializer with logic too 
 class CouponVerifySerializer(serializers.Serializer):
     coupon_code = serializers.CharField(required=False, allow_blank=True)
-
-    def validate(self, data):
-        coupon_code = data.get('coupon_code')
-        if not coupon_code:
-            return {'discount': 0, 'message': 'Coupon code is required.'}
-        try:
-            # Assuming coupon_code is an exact match for Coupon_name
-            coupon = Coupon.objects.get(Coupon_name__iexact=coupon_code)
-            return {'discount': coupon.Coupon_Discount, 'message': 'Coupon is valid.'}
-        except Coupon.DoesNotExist:
-            return {'discount': 0, 'message': 'Coupon code is not valid.'}

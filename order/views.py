@@ -31,7 +31,18 @@ class OrderModelViewSet(viewsets.ModelViewSet):
 class CouponVerifyView(APIView):
     def post(self, request):
         serializer = CouponVerifySerializer(data=request.data)
+        
         if serializer.is_valid():
-            response_data = serializer.validated_data
-            return Response(response_data)
-        return Response(serializer.errors)
+            coupon_code = serializer.validated_data.get('coupon_code')
+            
+            if not coupon_code:
+                return Response({'discount': 0, 'message': 'Coupon code is required.'}, status=400)
+            
+            try:
+                # Assuming coupon_code is an exact match for Coupon_name
+                coupon = Coupon.objects.get(Coupon_name__iexact=coupon_code)
+                return Response({'discount': coupon.Coupon_Discount, 'message': 'Coupon is valid.'})
+            except Coupon.DoesNotExist:
+                return Response({'discount': 0, 'message': 'Coupon code is not valid.'}, status=400)
+        
+        return Response(serializer.errors, status=400)
