@@ -1,9 +1,9 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Order,Location,Coupon
+from .models import OrderItem,Location,Coupon
 
-admin.site.register(Order)
+admin.site.register(OrderItem)
 
 admin.site.register(Location)
 

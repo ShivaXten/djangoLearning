@@ -2,7 +2,7 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from .models import Order, Coupon
+from .models import OrderItem, Coupon
 from .serializers import OrderCreateSerializer, OrderDetailSerializer,CouponVerifySerializer
 # ,OrderCouponVerifySerializer
 from rest_framework.views import APIView
@@ -22,7 +22,7 @@ class OrderModelViewSet(viewsets.ModelViewSet):
         serializer.save(user=self.request.user)
 
     def get_queryset(self):
-        return Order.objects.filter(user=self.request.user)
+        return OrderItem.objects.filter(user=self.request.user)
     
 
 

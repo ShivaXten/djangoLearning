@@ -25,7 +25,7 @@ class Coupon(models.Model):
 
 
 
-class Order(models.Model):
+class OrderItem(models.Model):
 
     STATUS_CHOICES = [
         ('pending', 'Pending'),
