@@ -48,7 +48,10 @@ INSTALLED_APPS = [
    #this is for the rest_framework installed from 
    'rest_framework',
    'cart',
-   'order'
+   'order',
+   'blogs',
+   'ckeditor',
+   'ckeditor_uploader'
   
 
 ]
@@ -157,3 +160,15 @@ LOGOUT_REDIRECT_URL = '/user/login/'
 #this is to add the profile image media 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+#This is to add the CKEDITOR in the project
+CKEDITOR_UPLOAD_PATH = 'uploads/'
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',
+        'width': '100%',
+        'height': 300,
+    },
+}
+
